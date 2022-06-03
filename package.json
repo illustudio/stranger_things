@@ -5,9 +5,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "gh-pages -d ./build"
   },
   "devDependencies": {
+    "gh-pages": "^4.0.0",
+    "prettier": "^2.6.2",
+    "sass": "^1.52.1",
     "vite": "^2.9.9"
-  }
+  },
+  "homepage": "https://illustudio.github.io/stranger_things",
+  "dependencies": {}
 }
