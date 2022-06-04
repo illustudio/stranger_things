@@ -113,11 +113,7 @@ const actionInit = (cast) => {
     let timer = 3500
     let elem
 
-    // 첫 배경이미지 설정
-    backgroundHandler(card, currentIndex)
-    animationHandler()
-    insertInfoElement()
-    addInfo(currentIndex)
+
     // 목록 이미지 설정
     images.forEach((image, index) => {
         // 각 이미지를 클릭했을 경우
@@ -140,13 +136,12 @@ const actionInit = (cast) => {
 
         }
         if (currentIndex === length) {
-
             return prevIndex = length - 1;
         }
         prevIndex = +currentIndex
         nextIndex = +currentIndex + 1
-        console.log(`addIndex - nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
         currentIndex++
+        console.log(`addIndex - nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
     }
     const minusIndex = (index) => {
         currentIndex = +index
@@ -170,13 +165,13 @@ const actionInit = (cast) => {
     }
 
     // 정보 삽입
-    function addInfo(target) {
+    const addInfo = (target) => {
         name.innerText = cast[+target].name
         description.innerText = cast[+target].description
     }
 
     // 노드 삽입
-    function insertInfoElement() {
+    const insertInfoElement = () => {
         infoWrapper.classList.add('character')
         name.classList.add('character-name')
         description.classList.add('character-desc')
@@ -186,7 +181,7 @@ const actionInit = (cast) => {
     }
 
     // 정보 삭제
-    function removeInfo() {
+    const removeInfo = () => {
         name.innerText = ''
         description.innerText = ''
     }
@@ -204,7 +199,7 @@ const actionInit = (cast) => {
     })
 
     // 일시정지
-    function pauseAutoPlay() {
+    const pauseAutoPlay = () => {
         clearInterval(interval)
         interval = null
         setTimeout(() => autoPlay(), timer)
@@ -240,7 +235,7 @@ const actionInit = (cast) => {
     })
 
     // 이동 핸들러
-    function moveHandler() {
+    const moveHandler = () => {
         addIndex(currentIndex)
         if (currentIndex >= 0 && length > currentIndex) {
             cardImageHandler(nextIndex)
@@ -255,7 +250,7 @@ const actionInit = (cast) => {
     }
 
     // 다음이동
-    function moveNext(currentIndex) {
+    const moveNext = (currentIndex) => {
         currentPosX = Math.abs(+currentPosX + (imageWidth + gap))
         if (currentIndex === 0) {
             carousel.style.transform = `translateX(0)`
@@ -273,7 +268,7 @@ const actionInit = (cast) => {
     }
 
     // 이전이동
-    function movePrev(currentIndex) {
+    const movePrev = (currentIndex) => {
         currentPosX = Math.abs(+currentPosX + (imageWidth + gap))
         if (currentIndex === 0) {
             console.log(`currentIndex 가 0일때 들어오는 값 : ${currentIndex}`)
@@ -292,13 +287,13 @@ const actionInit = (cast) => {
     }
 
     // 클래스 리셋
-    function resetActiveHandler(item) {
+    const resetActiveHandler = (item) => {
         images.forEach((image) => image.classList.remove('active'))
         item.classList.add('active')
     }
 
     // 현재 배경화면
-    function backgroundHandler(elem, target) {
+    const backgroundHandler = (elem, target) => {
         if (target < 0 || target === undefined || target === null) {
             target = 0
             console.log(target)
@@ -309,7 +304,7 @@ const actionInit = (cast) => {
     }
 
     // 카드 이미지 삽입
-    function cardImageHandler(index) {
+    const cardImageHandler = (index) => {
         elem = document.querySelector(`[data-id="${+index}"]`)
         resetActiveHandler(elem)
         card.style.backgroundImage = `url('./src/webp/${
@@ -318,7 +313,7 @@ const actionInit = (cast) => {
     }
 
     // 애니메이션 핸들러
-    function animationHandler() {
+    const animationHandler = () => {
         card.classList.add('animate')
         infoWrapper.classList.add('animate')
         window.addEventListener('animationend', () => {
@@ -335,6 +330,11 @@ const actionInit = (cast) => {
         }
     }
     autoPlay()
+    // 첫 배경이미지 설정
+    backgroundHandler(card, currentIndex)
+    animationHandler()
+    insertInfoElement()
+    addInfo(currentIndex)
 }
 window.addEventListener('DOMContentLoaded', () => init(cast))
 window.addEventListener('load', () => actionInit(cast))

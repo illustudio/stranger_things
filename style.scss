@@ -1,6 +1,7 @@
 :root {
-  --width: 1280px;
-  --height: 720px;
+  --width: 1140px;
+  --height: 680px;
+  --timing: 750ms;
 }
 
 * {
@@ -22,11 +23,11 @@ html, body {
   width: 100%;
   height: 100%;
   display: flex;
-
   align-items: center;
   flex-direction: column;
   overflow: hidden;
   gap: 2rem;
+  perspective: 1000px;
 
   header {
     width: 100%;
@@ -61,7 +62,26 @@ html, body {
   z-index: 0;
   border-radius: 2rem;
   background-color: hsla(255, 40%, 50%, 1);
+  transform-style: preserve-3d;
+  transform: rotateX(0deg);
+  transition: transform 0.5s ease-in-out;
 
+  outline: 1px solid transparent; // aliasing technique -https://stackoverflow.com/questions/6492027/css-transform-jagged-edges-in-chrome
+  &:hover {
+    transform: rotateX(3deg) translateZ(50px);
+
+    &::before, &::after {
+      transform: rotateX(-3deg) translateZ(50px) scale(1.5);
+    }
+
+    &::before {
+      transform: translateX(-50px);
+    }
+
+    &::after {
+      transform: translateX(50px);
+    }
+  }
 
   &::before, &::after {
     position: absolute;
@@ -71,8 +91,8 @@ html, body {
     background-size: cover;
     width: 50%;
     height: 50%;
-    z-index: 10;
-
+    z-index: 2;
+    transition: transform 0.5s ease-in-out;
   }
 
   &::before {
@@ -100,10 +120,11 @@ html, body {
     display: flex;
     align-items: center;
 
+
     &.animate {
       animation-name: tweenImage;
       animation-fill-mode: forwards;
-      animation-duration: 1400ms;
+      animation-duration: var(--timing);
       animation-timing-function: ease-in-out;
       animation-play-state: running;
     }
@@ -137,10 +158,10 @@ html, body {
     .character-name, .character-desc {
       animation-name: fadeUp;
       animation-fill-mode: forwards;
-      animation-duration: 700ms;
+      animation-duration: calc(var(--timing) / 2);
       animation-timing-function: ease-in-out;
       animation-play-state: running;
-      animation-delay: 700ms;
+      animation-delay: calc(var(--timing) / 2);
     }
   }
 
@@ -169,12 +190,12 @@ html, body {
 }
 
 .carousel {
-  width: 300px;
+  width: 270px;
   position: absolute;
   top: 50%;
   right: -50px;
   transform: translateY(-50%);
-  height: 260px;
+  height: 320px;
   overflow: hidden;
   padding-left: 1.125rem;
   display: flex;
@@ -185,7 +206,7 @@ html, body {
     position: absolute;
     top: 0;
     right: 0;
-    width: 50px;
+    width: 30px;
     height: 100%;
     background: linear-gradient(90deg, transparent 30%, #250909 70%);
     content: '';
@@ -194,9 +215,9 @@ html, body {
 
   &-container {
     display: flex;
-    align-items: center;
     width: 100%;
     height: 100%;
+    align-items: center;
     padding-bottom: 1rem;
     gap: 2rem;
     transition: all 0.2s ease-in-out;
@@ -204,11 +225,56 @@ html, body {
   }
 
   .buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 70px;
+
+
     button {
       border: 0;
       background: transparent;
       color: white;
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:focus {
+        outline: 0;
+      }
+
+      &:hover {
+        .button-arrow {
+          transform: scale(0.6);
+        }
+      }
+
+      &:active {
+        .button-arrow {
+          transform: scale(0.45);
+        }
+      }
+
+      .button-arrow {
+        width: 100%;
+        height: 100%;
+        transform: scale(0.5);
+        transform-origin: center;
+        transition: all 0.15s ease-in-out;
+
+        &:active {
+          transform: scale(0.45);
+        }
+      }
+
+      &:hover {
+
+      }
     }
+
   }
 
   &-item {
@@ -220,18 +286,22 @@ html, body {
     justify-content: center;
     cursor: pointer;
     user-select: none;
-    transition: all 0.15s cubic-bezier(1, 0, 0, 1);
+    transition: all 0.25s ease-in-out;
     transition-delay: 0.2s;
-    transform: scale(1) translateX(10px);
+    perspective: 1000px;
     filter: grayscale(0.8);
 
     &.active {
-      width: 140px;
-      transform: scale(1.125) translateX(0);
-      filter: grayscale(0);
+      width: 178px;
+      height: 256px;
+      filter: grayscale(0) drop-shadow(0 3px 10px hsla(0, 30%, 15%, 0.8));
+
+
     }
 
     img {
+      transform-style: preserve-3d;
+
       width: 100%;
       max-width: 100%;
       height: 100%;
@@ -240,6 +310,7 @@ html, body {
     }
   }
 }
+
 
 .dimmed {
   position: absolute;
