@@ -73,16 +73,12 @@ const cast = [
 
 const init = (cast) => {
     const carousel = document.querySelector('.carousel-container')
-    const card = document.querySelector('.card-image')
     const cardBg = document.querySelector('.card')
     const dimmedLayer = document.createElement('div')
 
     dimmedLayer.classList.add('dimmed')
     cardBg.appendChild(dimmedLayer)
-    card.classList.add('animate')
-    window.addEventListener('animationend', () => {
-        card.classList.remove('animate')
-    })
+
     cast.forEach((character, index) => {
         const figure = document.createElement('figure')
         const img = document.createElement('img')
@@ -110,15 +106,16 @@ const actionInit = (cast) => {
     let gap = 32
     let currentPosX = 0
     let currentIndex = 0
-    let prevIndex = +currentIndex - 1
-    let nextIndex = +currentIndex + 1
+    let prevIndex
+    let nextIndex
     let length = images.length - 1
     let interval
-    let timer = 3000
+    let timer = 3500
     let elem
 
     // 첫 배경이미지 설정
     backgroundHandler(card, currentIndex)
+    animationHandler()
     insertInfoElement()
     addInfo(currentIndex)
     // 목록 이미지 설정
@@ -127,33 +124,62 @@ const actionInit = (cast) => {
         image.addEventListener('click', (e) => {
             if (length >= index) {
                 if (!e.currentTarget.classList.contains('active')) {
-                    moveNext(index)
+                    moveHandler(currentIndex)
                 }
-                resetActiveHandler(image)
-                backgroundHandler(card, index)
-                backgroundHandler(cardBg, currentIndex)
-                animationHandler()
-
-                currentIndex = index
-                currentPosX = (imageWidth + gap) * index
             }
         })
     })
+    const addIndex = (index) => {
+        console.log(`addIndex에 들어온 index값 = ${index}`)
+        currentIndex = +index
+        if (currentIndex >= length) {
+            currentIndex = 0
+            prevIndex = length
+            nextIndex = 0
+            return console.log(`끝에 도달했을때 - nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
+
+        }
+        if (currentIndex === length) {
+
+            return prevIndex = length - 1;
+        }
+        prevIndex = +currentIndex
+        nextIndex = +currentIndex + 1
+        console.log(`addIndex - nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
+        currentIndex++
+    }
+    const minusIndex = (index) => {
+        currentIndex = +index
+        if (+currentIndex === 0) {
+            console.log(`currentIndex가 0일때 minusIndex 값- nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
+            prevIndex = 0
+
+            return
+        }
+        if (+currentIndex < 0) {
+            currentIndex = 0
+            prevIndex = length
+            nextIndex = 1
+            currentIndex++
+            return
+        }
+
+        prevIndex = +currentIndex - 1
+        nextIndex = +currentIndex;
+        currentIndex--
+    }
 
     // 정보 삽입
     function addInfo(target) {
-        if (target > length) {
-            name.innerText = cast[0].name
-            description.innerText = cast[0].description
-            nextIndex = +currentIndex + 1
-        }
         name.innerText = cast[+target].name
         description.innerText = cast[+target].description
     }
 
     // 노드 삽입
     function insertInfoElement() {
-        name.classList.add('cast-name')
+        infoWrapper.classList.add('character')
+        name.classList.add('character-name')
+        description.classList.add('character-desc')
         infoWrapper.appendChild(name)
         infoWrapper.appendChild(description)
         card.appendChild(infoWrapper)
@@ -177,47 +203,92 @@ const actionInit = (cast) => {
         autoPlay()
     })
 
-    // 이전버튼
-    prevButton.addEventListener('click', () => {
-        let elem
-        if (currentIndex > 0) {
-            prevIndex = +currentIndex - 1
-            cardImageHandler(prevIndex)
-            backgroundHandler(cardBg, currentIndex)
-            animationHandler()
-
-            currentIndex--
-            movePrev(currentIndex)
-        }
-
+    // 일시정지
+    function pauseAutoPlay() {
         clearInterval(interval)
         interval = null
         setTimeout(() => autoPlay(), timer)
+    }
+
+    // 이전버튼
+    prevButton.addEventListener('click', () => {
+        minusIndex(currentIndex)
+        console.log(`prev버튼 클릭시 - nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
+        pauseAutoPlay()
+        cardImageHandler(currentIndex)
+        if (+currentIndex === 0) {
+            backgroundHandler(cardBg, currentIndex)
+            animationHandler()
+            movePrev(currentIndex)
+            return
+        }
+        backgroundHandler(cardBg, nextIndex)
+        animationHandler()
+        movePrev(currentIndex)
+
     })
 
     // 다음버튼
     nextButton.addEventListener('click', () => {
-        moveHandler()
-        clearInterval(interval)
-        interval = null
-        setTimeout(() => autoPlay(), timer)
+        console.log(`next버튼 클릭시 - nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
+        addIndex(currentIndex)
+        pauseAutoPlay()
+        cardImageHandler(currentIndex)
+        backgroundHandler(cardBg, prevIndex)
+        animationHandler()
+        moveNext(nextIndex)
     })
 
     // 이동 핸들러
     function moveHandler() {
+        addIndex(currentIndex)
         if (currentIndex >= 0 && length > currentIndex) {
-            // nextIndex = currentIndex + 1
             cardImageHandler(nextIndex)
-            backgroundHandler(cardBg, currentIndex)
+            backgroundHandler(cardBg, prevIndex)
             animationHandler()
-            currentIndex++
             return moveNext(currentIndex)
         }
-        currentIndex = 0
         cardImageHandler(currentIndex)
-        backgroundHandler(cardBg, length)
+        backgroundHandler(cardBg, prevIndex)
         animationHandler()
         return moveNext(currentIndex)
+    }
+
+    // 다음이동
+    function moveNext(currentIndex) {
+        currentPosX = Math.abs(+currentPosX + (imageWidth + gap))
+        if (currentIndex === 0) {
+            carousel.style.transform = `translateX(0)`
+            removeInfo()
+            addInfo(nextIndex)
+        }
+        if (currentPosX > 0) {
+            carousel.style.transform = `translateX(-${
+                (imageWidth + gap) * currentIndex
+            }px)`
+            removeInfo()
+            addInfo(nextIndex)
+
+        }
+    }
+
+    // 이전이동
+    function movePrev(currentIndex) {
+        currentPosX = Math.abs(+currentPosX + (imageWidth + gap))
+        if (currentIndex === 0) {
+            console.log(`currentIndex 가 0일때 들어오는 값 : ${currentIndex}`)
+            carousel.style.transform = `translateX(0)`
+            removeInfo()
+            addInfo(prevIndex)
+        }
+
+        if (currentPosX >= 0) {
+            carousel.style.transform = `translateX(-${
+                (imageWidth + gap) * prevIndex
+            }px)`
+        }
+        removeInfo()
+        addInfo(prevIndex)
     }
 
     // 클래스 리셋
@@ -228,6 +299,10 @@ const actionInit = (cast) => {
 
     // 현재 배경화면
     function backgroundHandler(elem, target) {
+        if (target < 0 || target === undefined || target === null) {
+            target = 0
+            console.log(target)
+        }
         elem.style.backgroundImage = `url('./src/webp/${
             cast[+target].name
         }@2x.webp')`
@@ -245,37 +320,13 @@ const actionInit = (cast) => {
     // 애니메이션 핸들러
     function animationHandler() {
         card.classList.add('animate')
+        infoWrapper.classList.add('animate')
         window.addEventListener('animationend', () => {
             card.classList.remove('animate')
+            infoWrapper.classList.remove('animate')
         })
     }
 
-    // 다음이동
-    function moveNext(currentIndex) {
-        currentPosX = Math.abs(+currentPosX + (imageWidth + gap))
-        if (currentPosX >= 0)
-            carousel.style.transform = `translateX(-${
-                (imageWidth + gap) * currentIndex
-            }px)`
-        removeInfo()
-        addInfo(nextIndex)
-        nextIndex++
-
-
-    }
-
-    // 이전이동
-    function movePrev(currentIndex) {
-        currentPosX = +currentPosX - (imageWidth + gap)
-        if (currentPosX < 0) return (currentPosX = 0)
-        if (currentPosX >= 0) {
-            carousel.style.transform = `translateX(-${
-                (imageWidth + gap) * currentIndex
-            }px)`
-        }
-        removeInfo()
-        addInfo(prevIndex)
-    }
 
     // 자동재생
     const autoPlay = () => {

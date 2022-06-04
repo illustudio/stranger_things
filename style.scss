@@ -17,13 +17,34 @@ html, body {
   height: 100vh;
 }
 
+
 .container {
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center;
+
   align-items: center;
+  flex-direction: column;
   overflow: hidden;
+  gap: 2rem;
+
+  header {
+    width: 100%;
+    max-width: var(--width);
+    padding: 2rem 0 0;
+  }
+}
+
+.brand {
+  background-image: url('./src/webp/Stranger-Things-Logo.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 120px;
+  height: 50px;
 }
 
 .card {
@@ -76,12 +97,13 @@ html, body {
     background-repeat: no-repeat;
     background-position: center;
     transform-origin: center;
+    display: flex;
+    align-items: center;
 
     &.animate {
-
       animation-name: tweenImage;
       animation-fill-mode: forwards;
-      animation-duration: 1s;
+      animation-duration: 1400ms;
       animation-timing-function: ease-in-out;
       animation-play-state: running;
     }
@@ -99,6 +121,50 @@ html, body {
     opacity: 1;
     transform: scale(1);
     clip-path: inset(0 0 0 0);
+  }
+}
+
+.character {
+  display: flex;
+  color: white;
+  flex-direction: column;
+  width: 300px;
+  padding: 1rem;
+  margin-left: 2rem;
+  z-index: 10;
+
+  &.animate {
+    .character-name, .character-desc {
+      animation-name: fadeUp;
+      animation-fill-mode: forwards;
+      animation-duration: 700ms;
+      animation-timing-function: ease-in-out;
+      animation-play-state: running;
+      animation-delay: 700ms;
+    }
+  }
+
+  &-name {
+    font-size: 3rem;
+    text-transform: capitalize;
+    margin-bottom: 1rem;
+
+  }
+
+  &-desc {
+
+    line-height: 1.5;
+  }
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
