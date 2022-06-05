@@ -93,14 +93,6 @@ const init = (cast) => {
 
 
 }
-const audioControl = () => {
-    const audioButton = document.getElementById('audio')
-    const audio = new Audio('./src/sound.webm')
-    audioButton.addEventListener('click', (e) => {
-        e.preventDefault()
-        audio.play();
-    })
-}
 
 
 const actionInit = (cast) => {
@@ -370,5 +362,4 @@ const actionInit = (cast) => {
 window.addEventListener('DOMContentLoaded', () => init(cast))
 window.addEventListener('load', () => {
     actionInit(cast)
-    audioControl()
 })
