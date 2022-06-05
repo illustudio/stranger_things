@@ -135,7 +135,7 @@ const actionInit = (cast) => {
         flame.style.animationDelay = `${Math.random() * (10 - 1) + 1}s`;
         flame.style.opacity = `${Math.random()}`;
         wrapper.append(flame);
-        if (count < 150) {
+        if (count < 100) {
             window.requestAnimationFrame(addFlame);
             count++;
         }

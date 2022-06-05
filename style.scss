@@ -1,7 +1,8 @@
 :root {
-  --width: 1140px;
-  --height: 680px;
+  --width: 1024px;
+  --height: 650px;
   --timing: 750ms;
+  --radius: 1rem;
 }
 
 * {
@@ -22,7 +23,9 @@ html, body {
 .container {
   width: 100%;
   height: 100%;
+  padding-bottom: 4rem;
   display: flex;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
   overflow: hidden;
@@ -33,7 +36,8 @@ html, body {
   header {
     width: 100%;
     max-width: var(--width);
-    padding: 2rem 0 0;
+    display: flex;
+    justify-content: center;
   }
 }
 
@@ -50,6 +54,8 @@ html, body {
 }
 
 .card {
+
+
   width: 100%;
   min-width: 800px;
   max-width: var(--width);
@@ -61,18 +67,19 @@ html, body {
   background-position: center;
   position: relative;
   z-index: 0;
-  border-radius: 2rem;
-  background-color: hsla(255, 40%, 50%, 1);
+  border-radius: var(--radius);
+  background-color: transparent;
   transform-style: preserve-3d;
   transform: translateZ(-30px);
   transition: transform 0.5s ease-in-out;
+  animation: cardOpen 0.25s forwards ease-in-out;
+  outline: 1px solid transparent; // aliasing technique - https://stackoverflow.com/questions/6492027/css-transform-jagged-edges-in-chrome
 
-  outline: 1px solid transparent; // aliasing technique -https://stackoverflow.com/questions/6492027/css-transform-jagged-edges-in-chrome
   &:hover {
     transform: translateZ(0px);
 
     &::before, &::after {
-      transform: rotateX(-3deg) translateZ(50px) scale(1.5);
+      transform: rotateX(-3deg) translateZ(50px);
     }
 
     &::before {
@@ -89,7 +96,7 @@ html, body {
     content: '';
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100%;
     width: 50%;
     height: 50%;
     z-index: 2;
@@ -98,14 +105,14 @@ html, body {
   }
 
   &::before {
-    left: -300px;
+    left: -250px;
     bottom: -150px;
     background-image: url('./src/webp/cloud1.webp');
     animation: cloudAnimation 5s infinite ease-in-out;
   }
 
   &::after {
-    right: -300px;
+    right: -250px;
     bottom: -150px;
     background-image: url('./src/webp/cloud2.webp');
     animation: cloudAnimation 7s infinite 1s ease-in-out;
@@ -113,19 +120,31 @@ html, body {
 
   @keyframes cloudAnimation {
     0% {
-      transform: translate3d(0, 0, 10px);
+      transform: translate3d(0, 0, 0px);
     }
     50% {
-      transform: translate3d(0, 10px, 20px);
+      transform: translate3d(0, 15px, 10px);
     }
     100% {
-      transform: translate3d(0, 0, 10px);
+      transform: translate3d(0, 0, 0px);
     }
+  }
+
+  @keyframes cardOpen {
+    from {
+      transform: scale(0);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+
   }
 
   &-image {
     z-index: 1;
-    border-radius: 2rem;
+    border-radius: var(--radius);
     width: 100%;
     height: 100%;
     background-size: cover;
@@ -205,7 +224,7 @@ html, body {
 }
 
 .carousel {
-  width: 270px;
+  width: 320px;
   position: absolute;
   top: 50%;
   right: -50px;
@@ -310,18 +329,18 @@ html, body {
       width: 178px;
       height: 256px;
       filter: grayscale(0) drop-shadow(0 3px 10px hsla(0, 30%, 15%, 0.8));
-
-
+      overflow: hidden;
+      outline: 1px solid transparent;
     }
 
     img {
       transform-style: preserve-3d;
-
       width: 100%;
       max-width: 100%;
       height: 100%;
       object-fit: cover;
       border-radius: 0.5rem;
+      margin-top: -3px;
     }
   }
 }
@@ -337,7 +356,7 @@ html, body {
   filter: brightness(10%) contrast(70%);
   top: 0;
   left: 0;
-  border-radius: 2rem;
+  border-radius: var(--radius);
   transition: all 0.25s ease-in-out;
 
   &:hover {
@@ -355,7 +374,7 @@ html, body {
   background: linear-gradient(180deg, #ff2929 0%, transparent 100%);
   border-radius: 6px;
   filter: blur(1px);
-  transform: rotateX(180deg) translateX(-50px) translateZ(-80px) scale(0.5);
+  transform: rotateX(180deg) translateX(-50px) scale(0.5);
   animation: flame;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
@@ -363,16 +382,16 @@ html, body {
 
 @keyframes flame {
   0% {
-    transform: rotateX(180deg) translateX(-50px) translateZ(-80px) scale(0.5);
+    transform: rotateX(180deg) translateX(-50px) scale(0.5);
     bottom: -30px;
     opacity: 0;
   }
   50% {
-    transform: rotateX(-45deg) translateX(50px) translateZ(0px) scale(1);
+    transform: rotateX(-45deg) translateX(50px) scale(1);
     bottom: 20%;
   }
   100% {
-    transform: rotateX(180deg) translateX(-50px) translateZ(80px) scale(0);
+    transform: rotateX(180deg) translateX(-50px) scale(0);
     bottom: 40%;
   }
 }
