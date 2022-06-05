@@ -28,6 +28,7 @@ html, body {
   overflow: hidden;
   gap: 2rem;
   perspective: 1000px;
+  transform-style: preserve-3d;
 
   header {
     width: 100%;
@@ -63,7 +64,7 @@ html, body {
   border-radius: 2rem;
   background-color: hsla(255, 40%, 50%, 1);
   transform-style: preserve-3d;
-  transform: translateZ(-50px);
+  transform: translateZ(-30px);
   transition: transform 0.5s ease-in-out;
 
   outline: 1px solid transparent; // aliasing technique -https://stackoverflow.com/questions/6492027/css-transform-jagged-edges-in-chrome
@@ -211,7 +212,7 @@ html, body {
   transform: translateY(-50%);
   height: 320px;
   overflow: hidden;
-  padding-left: 1.125rem;
+  padding-left: 1rem;
   display: flex;
   flex-direction: column;
   z-index: 10;
@@ -219,7 +220,7 @@ html, body {
   &::before {
     position: absolute;
     top: 0;
-    right: 0;
+    right: -1px;
     width: 30px;
     height: 100%;
     background: linear-gradient(90deg, transparent 30%, #250909 70%);
@@ -233,7 +234,7 @@ html, body {
     height: 100%;
     align-items: center;
     padding-bottom: 1rem;
-    gap: 2rem;
+    gap: 1rem;
     transition: all 0.2s ease-in-out;
     transition-delay: 0.1s;
   }
@@ -342,5 +343,36 @@ html, body {
   &:hover {
     background-color: hsla(255, 40%, 50%, 0);
     filter: brightness(100%) contrast(100%);
+  }
+}
+
+.flame {
+  position: absolute;
+  bottom: -30px;
+  display: block;
+  width: 6px;
+  height: 15px;
+  background: linear-gradient(180deg, #ff2929 0%, transparent 100%);
+  border-radius: 6px;
+  filter: blur(1px);
+  transform: rotateX(180deg) translateX(-50px) translateZ(-80px) scale(0.5);
+  animation: flame;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes flame {
+  0% {
+    transform: rotateX(180deg) translateX(-50px) translateZ(-80px) scale(0.5);
+    bottom: -30px;
+    opacity: 0;
+  }
+  50% {
+    transform: rotateX(-45deg) translateX(50px) translateZ(0px) scale(1);
+    bottom: 20%;
+  }
+  100% {
+    transform: rotateX(180deg) translateX(-50px) translateZ(80px) scale(0);
+    bottom: 40%;
   }
 }

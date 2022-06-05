@@ -101,7 +101,10 @@ const audioControl = () => {
         audio.play();
     })
 }
+
+
 const actionInit = (cast) => {
+    const wrapper = document.getElementById('root')
     const card = document.querySelector('.card-image')
     const cardBg = document.querySelector('.card')
     const carousel = document.querySelector('.carousel-container')
@@ -113,7 +116,7 @@ const actionInit = (cast) => {
     const description = document.createElement('p')
 
     let imageWidth = 94
-    let gap = 32
+    let gap = 16
     let currentPosX = 0
     let currentIndex = 0
     let prevIndex
@@ -122,8 +125,21 @@ const actionInit = (cast) => {
     let interval
     let timer = 3500
     let elem
+    let count = 0
 
-
+    const addFlame = () => {
+        const flame = document.createElement('span');
+        flame.classList.add('flame');
+        flame.style.left = `${Math.random() * (window.innerWidth - 1) + 1}px`;
+        flame.style.animationDuration = `${Math.random() * (20 - 8) + 8}s`;
+        flame.style.animationDelay = `${Math.random() * (10 - 1) + 1}s`;
+        flame.style.opacity = `${Math.random()}`;
+        wrapper.append(flame);
+        if (count < 150) {
+            window.requestAnimationFrame(addFlame);
+            count++;
+        }
+    };
     // 목록 이미지 설정
     images.forEach((image, index) => {
         // 각 이미지를 클릭했을 경우
@@ -349,6 +365,7 @@ const actionInit = (cast) => {
     animationHandler()
     insertInfoElement()
     addInfo(currentIndex)
+    addFlame();
 }
 window.addEventListener('DOMContentLoaded', () => init(cast))
 window.addEventListener('load', () => {
