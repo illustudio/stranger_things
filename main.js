@@ -83,7 +83,7 @@ const init = (cast) => {
         const figure = document.createElement('figure')
         const img = document.createElement('img')
 
-        img.src = `./src/webp/${character.name}.webp`
+        img.src = `./assets/${character.name}.webp`
         figure.classList.add('carousel-item')
         figure.appendChild(img)
         figure.dataset.id = index
@@ -319,7 +319,7 @@ const actionInit = (cast) => {
             target = 0
             // console.log(target)
         }
-        elem.style.backgroundImage = `url('./src/webp/${
+        elem.style.backgroundImage = `url('./assets/${
             cast[+target].name
         }@2x.webp')`
     }
@@ -328,7 +328,7 @@ const actionInit = (cast) => {
     const cardImageHandler = (index) => {
         elem = document.querySelector(`[data-id="${+index}"]`)
         resetActiveHandler(elem)
-        card.style.backgroundImage = `url('./src/webp/${
+        card.style.backgroundImage = `url('./assets/${
             cast[+index].name
         }@2x.webp')`
     }

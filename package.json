@@ -7,7 +7,6 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "gh-pages -d ./build",
     "convert": "node converter.js"
   },
   "devDependencies": {
@@ -18,6 +17,5 @@
     "sass": "^1.52.1",
     "vite": "^2.9.9"
   },
-  "homepage": "https://illustudio.github.io/stranger_things",
   "dependencies": {}
 }

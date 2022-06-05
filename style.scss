@@ -42,7 +42,7 @@ html, body {
 }
 
 .brand {
-  background-image: url('./src/webp/Stranger-Things-Logo.webp');
+  background-image: url('public/assets/Stranger-Things-Logo.webp');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -107,14 +107,14 @@ html, body {
   &::before {
     left: -250px;
     bottom: -150px;
-    background-image: url('./src/webp/cloud1.webp');
+    background-image: url('public/assets/cloud1.webp');
     animation: cloudAnimation 5s infinite ease-in-out;
   }
 
   &::after {
     right: -250px;
     bottom: -150px;
-    background-image: url('./src/webp/cloud2.webp');
+    background-image: url('public/assets/cloud2.webp');
     animation: cloudAnimation 7s infinite 1s ease-in-out;
   }
 
