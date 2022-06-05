@@ -1,4 +1,5 @@
 import './style.scss'
+import feather from 'feather-icons'
 
 const cast = [
     {
@@ -106,7 +107,9 @@ const actionInit = (cast) => {
     const infoWrapper = document.createElement('div')
     const name = document.createElement('h2')
     const description = document.createElement('p')
-
+    const infoButton = document.getElementById("info")
+    const siteInfo = document.getElementById('site-info')
+    const closeButton = document.getElementById('close')
     let imageWidth = 94
     let gap = 16
     let currentPosX = 0
@@ -118,6 +121,20 @@ const actionInit = (cast) => {
     let timer = 3500
     let elem
     let count = 0
+
+
+    const infoLayer = () => {
+        if (!siteInfo.classList.contains('active')) {
+            return siteInfo.classList.add('active')
+        }
+        siteInfo.classList.remove('active')
+    }
+    infoButton.addEventListener("click", () => {
+        infoLayer()
+    })
+    closeButton.addEventListener("click", () => {
+        infoLayer()
+    })
 
     const addFlame = () => {
         const flame = document.createElement('span');
@@ -361,5 +378,6 @@ const actionInit = (cast) => {
 }
 window.addEventListener('DOMContentLoaded', () => init(cast))
 window.addEventListener('load', () => {
+    feather.replace()
     actionInit(cast)
 })

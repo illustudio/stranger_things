@@ -17,5 +17,7 @@
     "sass": "^1.52.1",
     "vite": "^2.9.9"
   },
-  "dependencies": {}
+  "dependencies": {
+    "feather-icons": "^4.29.0"
+  }
 }
