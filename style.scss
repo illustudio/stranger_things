@@ -63,12 +63,12 @@ html, body {
   border-radius: 2rem;
   background-color: hsla(255, 40%, 50%, 1);
   transform-style: preserve-3d;
-  transform: rotateX(0deg);
+  transform: translateZ(-50px);
   transition: transform 0.5s ease-in-out;
 
   outline: 1px solid transparent; // aliasing technique -https://stackoverflow.com/questions/6492027/css-transform-jagged-edges-in-chrome
   &:hover {
-    transform: rotateX(3deg) translateZ(50px);
+    transform: translateZ(0px);
 
     &::before, &::after {
       transform: rotateX(-3deg) translateZ(50px) scale(1.5);
@@ -93,19 +93,33 @@ html, body {
     height: 50%;
     z-index: 2;
     transition: transform 0.5s ease-in-out;
+
   }
 
   &::before {
     left: -300px;
     bottom: -150px;
     background-image: url('./src/webp/cloud1.webp');
+    animation: cloudAnimation 5s infinite ease-in-out;
   }
 
   &::after {
     right: -300px;
     bottom: -150px;
     background-image: url('./src/webp/cloud2.webp');
+    animation: cloudAnimation 7s infinite 1s ease-in-out;
+  }
 
+  @keyframes cloudAnimation {
+    0% {
+      transform: translate3d(0, 0, 10px);
+    }
+    50% {
+      transform: translate3d(0, 10px, 20px);
+    }
+    100% {
+      transform: translate3d(0, 0, 10px);
+    }
   }
 
   &-image {

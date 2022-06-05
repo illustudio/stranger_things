@@ -90,6 +90,16 @@ const init = (cast) => {
         carousel.appendChild(figure)
         document.querySelector(`[data-id="0"]`).classList.add('active')
     })
+
+
+}
+const audioControl = () => {
+    const audioButton = document.getElementById('audio')
+    const audio = new Audio('./src/sound.webm')
+    audioButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        audio.play();
+    })
 }
 const actionInit = (cast) => {
     const card = document.querySelector('.card-image')
@@ -126,13 +136,14 @@ const actionInit = (cast) => {
         })
     })
     const addIndex = (index) => {
-        console.log(`addIndex에 들어온 index값 = ${index}`)
+        // console.log(`addIndex에 들어온 index값 = ${index}`)
         currentIndex = +index
         if (currentIndex >= length) {
             currentIndex = 0
             prevIndex = length
             nextIndex = 0
-            return console.log(`끝에 도달했을때 - nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
+            return
+            // return console.log(`끝에 도달했을때 - nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
 
         }
         if (currentIndex === length) {
@@ -141,14 +152,15 @@ const actionInit = (cast) => {
         prevIndex = +currentIndex
         nextIndex = +currentIndex + 1
         currentIndex++
-        console.log(`addIndex - nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
+        // console.log(`addIndex - nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
     }
     const minusIndex = (index) => {
         currentIndex = +index
         if (+currentIndex === 0) {
-            console.log(`currentIndex가 0일때 minusIndex 값- nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
-            prevIndex = 0
-
+            // console.log(`currentIndex가 0일때 minusIndex 값- nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
+            prevIndex = length
+            currentIndex = length
+            nextIndex = 0
             return
         }
         if (+currentIndex < 0) {
@@ -158,6 +170,7 @@ const actionInit = (cast) => {
             currentIndex++
             return
         }
+
 
         prevIndex = +currentIndex - 1
         nextIndex = +currentIndex;
@@ -208,15 +221,15 @@ const actionInit = (cast) => {
     // 이전버튼
     prevButton.addEventListener('click', () => {
         minusIndex(currentIndex)
-        console.log(`prev버튼 클릭시 - nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
+        // console.log(`prev버튼 클릭시 - nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
         pauseAutoPlay()
         cardImageHandler(currentIndex)
-        if (+currentIndex === 0) {
-            backgroundHandler(cardBg, currentIndex)
-            animationHandler()
-            movePrev(currentIndex)
-            return
-        }
+        // if (+currentIndex === 0) {
+        //     backgroundHandler(cardBg, currentIndex)
+        //     animationHandler()
+        //     movePrev(currentIndex)
+        //     return
+        // }
         backgroundHandler(cardBg, nextIndex)
         animationHandler()
         movePrev(currentIndex)
@@ -225,7 +238,7 @@ const actionInit = (cast) => {
 
     // 다음버튼
     nextButton.addEventListener('click', () => {
-        console.log(`next버튼 클릭시 - nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
+        // console.log(`next버튼 클릭시 - nextIndex : ${nextIndex}, currentIndex : ${currentIndex}, prevIndex: ${prevIndex}`)
         addIndex(currentIndex)
         pauseAutoPlay()
         cardImageHandler(currentIndex)
@@ -271,7 +284,7 @@ const actionInit = (cast) => {
     const movePrev = (currentIndex) => {
         currentPosX = Math.abs(+currentPosX + (imageWidth + gap))
         if (currentIndex === 0) {
-            console.log(`currentIndex 가 0일때 들어오는 값 : ${currentIndex}`)
+            // console.log(`currentIndex 가 0일때 들어오는 값 : ${currentIndex}`)
             carousel.style.transform = `translateX(0)`
             removeInfo()
             addInfo(prevIndex)
@@ -296,7 +309,7 @@ const actionInit = (cast) => {
     const backgroundHandler = (elem, target) => {
         if (target < 0 || target === undefined || target === null) {
             target = 0
-            console.log(target)
+            // console.log(target)
         }
         elem.style.backgroundImage = `url('./src/webp/${
             cast[+target].name
@@ -328,7 +341,8 @@ const actionInit = (cast) => {
         if (!interval) {
             interval = setInterval(moveHandler, timer)
         }
-    }
+    };
+
     autoPlay()
     // 첫 배경이미지 설정
     backgroundHandler(card, currentIndex)
@@ -337,4 +351,7 @@ const actionInit = (cast) => {
     addInfo(currentIndex)
 }
 window.addEventListener('DOMContentLoaded', () => init(cast))
-window.addEventListener('load', () => actionInit(cast))
+window.addEventListener('load', () => {
+    actionInit(cast)
+    audioControl()
+})
